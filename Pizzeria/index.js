@@ -1,8 +1,39 @@
 import { Ingredient } from './classes/ingredient.js'
 import { Pizza } from './classes/pizza.js'
 let pizza
-console.log(pizza)
-console.log(typeof pizza)
+
+function orderPizza() {
+  console.log(pizza)
+  let ingredients = pizza.ingredients
+  let time = 0
+  ingredients.forEach((ingredient) => {
+    time += 1000
+  })
+  const aside = document.querySelector('aside')
+  aside.textContent = 'Cooking Pizza'
+  setTimeout(deliverPizza, time)
+}
+
+function deliverPizza() {
+  const aside = document.querySelector('aside')
+
+  const commandReady = ` <figure>
+                        <img src="assets/img/pizza.png" alt="Pizza" />
+                    </figure>
+                    <h4>Pizza prête !</h4>`
+  aside.innerHTML = commandReady
+  setTimeout(clearPizza, 5000)
+}
+
+function clearPizza() {
+  const aside = document.querySelector('aside')
+  aside.innerHTML = ''
+  const h2 = document.createElement('h2')
+  h2.textContent = 'Votre Pizza'
+  const ul = document.createElement('ul')
+  aside.appendChild(h2)
+  aside.appendChild(ul)
+}
 
 function toggleSelection(e) {
   //init new Pizza if not allready
@@ -20,7 +51,6 @@ function toggleSelection(e) {
 
     if (!article.classList.contains('selected')) {
       pizza.addIngredient(name)
-      console.log(pizza)
     } else {
       pizza.removeIngredient(name)
     }
@@ -40,17 +70,20 @@ function toggleSelection(e) {
 
   let list = pizza.display()
   const asideUl = document.querySelector('aside > ul')
-  const button = ` <li><button id="order">Commander</button></li>`
-
+  const li = document.createElement('li')
+  const button = document.createElement('button')
+  button.id = 'order'
+  button.textContent = 'Commander'
+  button.addEventListener('click', orderPizza)
+  li.appendChild(button)
   asideUl.innerHTML = list
-  asideUl.innerHTML += button
+  asideUl.appendChild(li)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   let availableIngredients = []
   const bacon = new Ingredient('Bacon', 'assets/img/bacon.png')
   availableIngredients.push(bacon)
-
   const carotte = new Ingredient('Carotte', 'assets/img/carrots.png')
   availableIngredients.push(carotte)
   const fromage = new Ingredient('Fromage', 'assets/img/cheese.png')
